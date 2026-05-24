@@ -13,9 +13,9 @@
     </div>
 
     <div class="lys-ba__slider" id="lys-ba-slider">
-      <img src="{{ section.settings.after | image_url: width: 1400 }}" class="lys-ba__img lys-ba__img--after" alt="After">
+      <img src="{% if section.settings.after %}{{ section.settings.after | image_url: width: 1400 }}{% else %}{{ 'lifestyle-2.jpg' | asset_url }}{% endif %}" class="lys-ba__img lys-ba__img--after" alt="After">
       <div class="lys-ba__before-wrap">
-        <img src="{{ section.settings.before | image_url: width: 1400 }}" class="lys-ba__img lys-ba__img--before" alt="Before">
+        <img src="{% if section.settings.before %}{{ section.settings.before | image_url: width: 1400 }}{% else %}https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=1400&q=90&fit=crop{% endif %}" class="lys-ba__img lys-ba__img--before" alt="Before">
       </div>
       <div class="lys-ba__handle" data-handle>
         <span class="lys-ba__handle-line"></span>

@@ -13,7 +13,7 @@
       ></iframe>
     </div>
   {%- else -%}
-    <div class="lys-hero__bg" style="background-image:url('{% if section.settings.bg_image %}{{ section.settings.bg_image | image_url: width: 2400 }}{% else %}https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=2400&q=90&fit=crop{% endif %}');"></div>
+    <div class="lys-hero__bg" style="background-image:url('{% if section.settings.bg_image %}{{ section.settings.bg_image | image_url: width: 2400 }}{% else %}{{ 'hero-bg.jpg' | asset_url }}{% endif %}');"></div>
   {%- endif -%}
 
   <div class="lys-hero__overlay"></div>

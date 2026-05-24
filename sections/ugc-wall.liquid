@@ -11,12 +11,13 @@
   </div>
 
   <div class="lys-ugc__masonry">
+    {%- assign ugc_asset = 'ugc-1.jpg' | asset_url -%}
     {%- assign fallbacks = 'photo-1524157908232-f591d969233b,photo-1557353425-c6646a8809ce,photo-1558622625-697f40efc834,photo-1500917293891-ef795e70e1f6,photo-1634449571017-5fecfd26ad76,photo-1707979577466-2d6109c68a45,photo-1618566909269-a09202832ac6,photo-1685157713304-977307f78ef7,photo-1524157908232-f591d969233b,photo-1522337360788-8b13dee7a37e,photo-1557353425-c6646a8809ce,photo-1558622625-697f40efc834' | split: ',' -%}
     {% for block in section.blocks %}
       {%- assign fb = fallbacks[forloop.index0] -%}
       <a href="{{ block.settings.product_url | default: '#' }}" class="lys-ugc__item" {{ block.shopify_attributes }}>
         <img
-          src="{% if block.settings.image %}{{ block.settings.image | image_url: width: 600 }}{% else %}https://images.unsplash.com/{{ fb }}?w=600&q=85&fit=crop{% endif %}"
+          src="{% if block.settings.image %}{{ block.settings.image | image_url: width: 600 }}{% elsif forloop.index0 == 0 %}{{ ugc_asset }}{% else %}https://images.unsplash.com/{{ fb }}?w=600&q=85&fit=crop{% endif %}"
           alt="{{ block.settings.handle | default: 'LYS Hair customer' }}"
           loading="lazy"
         >
