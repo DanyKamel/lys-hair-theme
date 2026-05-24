@@ -1,0 +1,189 @@
+{% comment %}
+  LYS HAIR — Product Template
+  Full conversion-optimised product page
+  Psychology stack: scarcity, social proof, anchoring, urgency, FOMO,
+  loss aversion (free shipping bar), reciprocity (guarantee), commitment (quiz)
+{% endcomment %}
+
+<div class="lys-product" data-product-id="{{ product.id }}">
+  <div class="lys-product__grid">
+
+    {%- comment -%} LEFT: Gallery {%- endcomment -%}
+    <div class="lys-product__media">
+      <div class="lys-product__main-img">
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | image_url: width: 1200 }}"
+               alt="{{ product.featured_image.alt | escape }}"
+               id="lys-main-img" loading="eager">
+        {% endif %}
+        <span class="lys-badge lys-badge--bestseller">Best Seller</span>
+      </div>
+      <div class="lys-product__thumbs">
+        {% for image in product.images %}
+          <button class="lys-thumb {% if forloop.first %}is-active{% endif %}"
+                  data-img="{{ image | image_url: width: 1200 }}">
+            <img src="{{ image | image_url: width: 200 }}" alt="{{ image.alt | escape }}" loading="lazy">
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    {%- comment -%} RIGHT: Info & Buy Box {%- endcomment -%}
+    <div class="lys-product__info">
+
+      <div class="lys-product__breadcrumb">
+        <a href="/">Home</a> / <a href="/collections/all">Extensions</a> / <span>{{ product.title }}</span>
+      </div>
+
+      <h1 class="lys-product__title">{{ product.title }}</h1>
+
+      <div class="lys-product__rating">
+        <span class="lys-stars">★★★★★</span>
+        <a href="#reviews" class="lys-product__review-link">
+          {{ product.metafields.reviews.rating_count | default: 347 }} reviews
+        </a>
+      </div>
+
+      <div class="lys-product__price">
+        {% if product.compare_at_price > product.price %}
+          <span class="lys-price--sale">{{ product.price | money }}</span>
+          <span class="lys-price--compare">{{ product.compare_at_price | money }}</span>
+          <span class="lys-price--save">
+            Save {{ product.compare_at_price | minus: product.price | money }}
+          </span>
+        {% else %}
+          <span class="lys-price--sale">{{ product.price | money }}</span>
+        {% endif %}
+      </div>
+
+      <div class="lys-product__installments">
+        or 4 interest-free payments of {{ product.price | divided_by: 4.0 | money }} with
+        <strong>Afterpay</strong> · <strong>Klarna</strong>
+      </div>
+
+      {%- comment -%} Shade / variant selector {%- endcomment -%}
+      <form action="/cart/add" method="post" enctype="multipart/form-data" class="lys-product__form" id="lys-add-form">
+
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <div class="lys-option">
+              <label class="lys-option__label">
+                {{ option.name }}: <strong data-selected="{{ option.name }}">{{ option.selected_value }}</strong>
+              </label>
+              <div class="lys-option__values">
+                {% for value in option.values %}
+                  <button type="button"
+                          class="lys-swatch {% if value == option.selected_value %}is-active{% endif %}"
+                          data-option-name="{{ option.name }}"
+                          data-option-value="{{ value }}">
+                    {{ value }}
+                  </button>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endunless %}
+
+        {%- comment -%} Scarcity: low stock {%- endcomment -%}
+        {% if product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity < 6 %}
+          <div class="lys-scarcity">
+            <span class="lys-scarcity__dot"></span>
+            Only <strong>{{ product.selected_or_first_available_variant.inventory_quantity }} left</strong> in this shade — order soon
+          </div>
+        {% endif %}
+
+        {%- comment -%} Live viewers {%- endcomment -%}
+        <div class="lys-viewers">
+          <span class="lys-viewers__eye">👁</span>
+          <strong data-viewers>{{ 18 | plus: 0 }}</strong> people are viewing this right now
+        </div>
+
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="lys-variant-id">
+
+        <div class="lys-qty">
+          <button type="button" class="lys-qty__btn" data-qty="-1">−</button>
+          <input type="number" name="quantity" value="1" min="1" class="lys-qty__input">
+          <button type="button" class="lys-qty__btn" data-qty="1">+</button>
+        </div>
+
+        <button type="submit" class="lys-btn lys-btn--primary lys-btn--block" id="lys-atc">
+          <span>Add to Bag — {{ product.price | money }}</span>
+        </button>
+
+        <button type="button" class="lys-btn lys-btn--dark lys-btn--block" id="lys-buy-now">
+          Buy Now with Shop Pay
+        </button>
+
+        {% render 'free-shipping-progress', product: product %}
+
+      </form>
+
+      {%- comment -%} Trust row {%- endcomment -%}
+      <div class="lys-trust">
+        <div class="lys-trust__item">
+          <span>🚚</span>
+          <div><strong>Free Shipping</strong><small>Orders over $150</small></div>
+        </div>
+        <div class="lys-trust__item">
+          <span>↩</span>
+          <div><strong>Free Returns</strong><small>30 days, no questions</small></div>
+        </div>
+        <div class="lys-trust__item">
+          <span>✦</span>
+          <div><strong>100% Remy Hair</strong><small>Ethically sourced</small></div>
+        </div>
+        <div class="lys-trust__item">
+          <span>⚡</span>
+          <div><strong>Ships in 24h</strong><small>From Sydney</small></div>
+        </div>
+      </div>
+
+      {%- comment -%} Accordion {%- endcomment -%}
+      <div class="lys-accordion">
+        <details open>
+          <summary>Description</summary>
+          <div class="lys-accordion__body">{{ product.description }}</div>
+        </details>
+        <details>
+          <summary>How to Apply</summary>
+          <div class="lys-accordion__body">
+            <ol>
+              <li>Section your hair from ear to ear.</li>
+              <li>Clip extensions in starting from the nape.</li>
+              <li>Work upward, layering 2–3 wefts per section.</li>
+              <li>Blend with a paddle brush and style as desired.</li>
+            </ol>
+          </div>
+        </details>
+        <details>
+          <summary>Shade Match Guide</summary>
+          <div class="lys-accordion__body">
+            <p>Not sure of your shade? <a href="/pages/shade-quiz">Take our 60-second shade quiz</a> for a personalised match — or message us a selfie in natural light and we'll match you for free.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Returns & Guarantee</summary>
+          <div class="lys-accordion__body">
+            <p>Try them on. If you're not in love within 30 days, send them back for a full refund. We pay return shipping.</p>
+          </div>
+        </details>
+      </div>
+
+      {% render 'frequently-bought-together', product: product %}
+
+    </div>
+  </div>
+
+  {% render 'sticky-atc', product: product %}
+</div>
+
+{% render 'product-styles' %}
+{% render 'product-scripts', product: product %}
+
+{% schema %}
+{
+  "name": "Product Template",
+  "settings": [],
+  "presets": [{ "name": "Product Template" }]
+}
+{% endschema %}

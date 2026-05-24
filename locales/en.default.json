@@ -1,0 +1,28 @@
+{
+  "general": {
+    "password_page": {
+      "opening_soon": "Opening soon",
+      "enter_password": "Enter password",
+      "password_placeholder": "Your password",
+      "submit_button": "Enter"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "description": "Description"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Your cart",
+      "empty": "Your cart is empty",
+      "checkout": "Checkout",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping & taxes calculated at checkout"
+    }
+  }
+}

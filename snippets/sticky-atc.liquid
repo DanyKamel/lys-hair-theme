@@ -1,0 +1,78 @@
+{% comment %}
+  LYS HAIR — Sticky Add-to-Cart (mobile)
+  Appears after user scrolls past main ATC button
+  Psychology: Reduces friction — buy button always accessible
+{% endcomment %}
+
+<div class="lys-sticky-atc" id="lys-sticky-atc" aria-hidden="true">
+  <img src="{{ product.featured_image | image_url: width: 100 }}" alt="" class="lys-sticky-atc__img">
+  <div class="lys-sticky-atc__info">
+    <p class="lys-sticky-atc__title">{{ product.title | truncate: 28 }}</p>
+    <p class="lys-sticky-atc__price">{{ product.price | money }}</p>
+  </div>
+  <button class="lys-btn lys-btn--primary" id="lys-sticky-atc-btn">ADD TO BAG</button>
+</div>
+
+<style>
+  .lys-sticky-atc {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #FFFFFF;
+    border-top: 1px solid #2E2820;
+    padding: 12px 16px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    z-index: 80;
+    box-shadow: 0 -8px 24px rgba(26, 20, 16, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lys-sticky-atc.is-visible { transform: translateY(0); }
+  .lys-sticky-atc__img {
+    width: 48px; height: 48px;
+    object-fit: cover;
+  }
+  .lys-sticky-atc__info { flex: 1; min-width: 0; }
+  .lys-sticky-atc__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    margin: 0;
+    color: #1A1410;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lys-sticky-atc__price {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: #C9A97A;
+    margin: 2px 0 0;
+  }
+  .lys-sticky-atc .lys-btn { padding: 12px 20px; font-size: 11px; }
+  @media (min-width: 769px) { .lys-sticky-atc { display: none !important; } }
+  @media (max-width: 768px) {
+    .lys-sticky-atc { display: flex; }
+  }
+</style>
+
+<script>
+  (function() {
+    const sticky = document.getElementById('lys-sticky-atc');
+    const mainAtc = document.getElementById('lys-atc');
+    if (!sticky || !mainAtc) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        sticky.classList.remove('is-visible');
+      } else if (entry.boundingClientRect.top < 0) {
+        sticky.classList.add('is-visible');
+      }
+    }, { threshold: 0 });
+    observer.observe(mainAtc);
+
+    document.getElementById('lys-sticky-atc-btn').addEventListener('click', () => {
+      mainAtc.click();
+    });
+  })();
+</script>

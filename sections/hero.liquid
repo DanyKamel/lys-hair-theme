@@ -1,0 +1,172 @@
+{% comment %}LYS HAIR — Hero with video or image background{% endcomment %}
+
+<section class="lys-hero" id="lys-hero">
+
+  {%- if section.settings.video_url != blank -%}
+    <div class="lys-hero__video-wrap">
+      <iframe
+        src="{{ section.settings.video_url }}?autoplay=1&muted=1&loop=1&background=1&autopause=0&controls=0&playsinline=1"
+        class="lys-hero__iframe"
+        allow="autoplay; fullscreen"
+        frameborder="0"
+        title="Hero video"
+      ></iframe>
+    </div>
+  {%- else -%}
+    <div class="lys-hero__bg" style="background-image:url('{% if section.settings.bg_image %}{{ section.settings.bg_image | image_url: width: 2400 }}{% else %}https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=2400&q=90&fit=crop{% endif %}');"></div>
+  {%- endif -%}
+
+  <div class="lys-hero__overlay"></div>
+
+  <div class="lys-hero__content">
+    <span class="lys-hero__eyebrow">{{ section.settings.eyebrow | default: 'LYS HAIR BY NORHAN' }}</span>
+    <h1 class="lys-hero__title">{{ section.settings.headline | default: 'The hair you've always wanted' }}</h1>
+    <p class="lys-hero__sub">{{ section.settings.subheadline | default: 'Luxury extensions, undetectable application, salon-quality results — without the salon price.' }}</p>
+    <div class="lys-hero__ctas">
+      <a href="{{ section.settings.cta_primary_url | default: '/collections/all' }}" class="lys-btn lys-btn--gold">
+        {{ section.settings.cta_primary_text | default: 'Shop Extensions' }}
+      </a>
+      <a href="{{ section.settings.cta_secondary_url | default: '/pages/shade-quiz' }}" class="lys-btn lys-btn--ghost">
+        {{ section.settings.cta_secondary_text | default: 'Find My Shade' }}
+      </a>
+    </div>
+    <div class="lys-hero__proof">
+      <div class="lys-hero__stars">★★★★★</div>
+      <span>{{ section.settings.proof_text | default: 'Loved by 10,000+ women worldwide' }}</span>
+    </div>
+  </div>
+
+  <div class="lys-hero__scroll-cue"><span></span></div>
+</section>
+
+<style>
+.lys-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #0E0A07;
+  color: #F5EFE6;
+  text-align: center;
+}
+.lys-hero__video-wrap {
+  position: absolute; inset: -10%;
+  pointer-events: none;
+  z-index: 0;
+}
+.lys-hero__iframe {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.1);
+}
+.lys-hero__bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  animation: lysZoom 20s ease-out infinite alternate;
+  z-index: 0;
+}
+.lys-hero__overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, rgba(14,10,7,.2) 0%, rgba(14,10,7,.65) 60%, rgba(14,10,7,.9) 100%);
+}
+.lys-hero__content {
+  position: relative; z-index: 2;
+  max-width: 820px;
+  padding: 0 24px;
+  animation: lysFadeUp .9s ease both;
+}
+.lys-hero__eyebrow {
+  display: inline-block;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: #C9A97A;
+  margin-bottom: 28px;
+}
+.lys-hero__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(52px, 8vw, 110px);
+  line-height: .97;
+  margin: 0 0 28px;
+  letter-spacing: -.02em;
+}
+.lys-hero__sub {
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(15px, 1.8vw, 18px);
+  line-height: 1.7;
+  color: rgba(245,239,230,.78);
+  max-width: 540px;
+  margin: 0 auto 44px;
+  font-weight: 300;
+}
+.lys-hero__ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+.lys-btn {
+  display: inline-block;
+  padding: 17px 42px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all .25s;
+  cursor: pointer;
+}
+.lys-btn--gold { background: #C9A97A; color: #0E0A07; border-color: #C9A97A; }
+.lys-btn--gold:hover { background: #D9BC8E; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,169,122,.35); }
+.lys-btn--ghost { background: transparent; color: #F5EFE6; border-color: rgba(245,239,230,.5); }
+.lys-btn--ghost:hover { background: #F5EFE6; color: #0E0A07; }
+.lys-hero__proof {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'Jost', sans-serif; font-size: 12px; letter-spacing: .12em;
+  color: rgba(245,239,230,.7);
+}
+.lys-hero__stars { color: #C9A97A; letter-spacing: 2px; }
+.lys-hero__scroll-cue {
+  position: absolute; bottom: 36px; left: 50%;
+  transform: translateX(-50%);
+  width: 22px; height: 38px;
+  border: 1px solid rgba(245,239,230,.3);
+  border-radius: 11px; z-index: 2;
+}
+.lys-hero__scroll-cue span {
+  position: absolute; top: 7px; left: 50%;
+  transform: translateX(-50%);
+  width: 2px; height: 7px; background: #C9A97A; border-radius: 2px;
+  animation: lysScroll 1.8s ease-in-out infinite;
+}
+@keyframes lysZoom { to { transform: scale(1.12); } }
+@keyframes lysScroll {
+  0%,100% { opacity: 1; transform: translate(-50%,0); }
+  50% { opacity: .3; transform: translate(-50%,12px); }
+}
+@keyframes lysFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "video_url", "label": "Vimeo video URL (paste Vimeo player URL for video background)", "info": "Paste a Vimeo URL like https://player.vimeo.com/video/YOUR_ID — video plays silently on loop" },
+    { "type": "image_picker", "id": "bg_image", "label": "Fallback background image (used if no video URL)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "LYS HAIR BY NORHAN" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "The hair you've always wanted" },
+    { "type": "textarea", "id": "subheadline", "label": "Subheadline", "default": "Luxury extensions, undetectable application, salon-quality results — without the salon price." },
+    { "type": "text", "id": "cta_primary_text", "label": "Primary CTA", "default": "Shop Extensions" },
+    { "type": "url", "id": "cta_primary_url", "label": "Primary CTA URL" },
+    { "type": "text", "id": "cta_secondary_text", "label": "Secondary CTA", "default": "Find My Shade" },
+    { "type": "url", "id": "cta_secondary_url", "label": "Secondary CTA URL" },
+    { "type": "text", "id": "proof_text", "label": "Social proof text", "default": "Loved by 10,000+ women worldwide" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

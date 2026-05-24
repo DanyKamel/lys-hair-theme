@@ -1,0 +1,113 @@
+{% comment %}LYS HAIR BY NORHAN — Theme Layout{% endcomment %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0E0A07">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap">
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+  {{ content_for_header }}
+  {{ 'lys-theme.css' | asset_url | stylesheet_tag }}
+</head>
+<body class="lys-body template-{{ template | replace: '.', '-' | handle }}">
+
+  {% render 'announcement-bar' %}
+
+  <header class="lys-header" id="lys-header">
+    <a href="/" class="lys-header__logo">LYS <em>HAIR</em></a>
+    <nav aria-label="Main navigation">
+      <ul class="lys-nav">
+        <li><a href="/collections/all">Shop</a></li>
+        <li><a href="/pages/about">About</a></li>
+        <li><a href="/pages/shade-quiz">Shade Quiz</a></li>
+        <li><a href="/pages/contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="lys-header__actions">
+      <a href="/cart" class="lys-header__cart-btn" data-cart-open>Cart ({{ cart.item_count }})</a>
+    </div>
+  </header>
+
+  <main id="MainContent" style="padding-top:76px;">
+    {{ content_for_layout }}
+  </main>
+
+  <footer class="lys-footer">
+    <div class="lys-footer__grid">
+      <div>
+        <div class="lys-footer__brand">LYS <em>HAIR</em></div>
+        <p class="lys-footer__desc">Luxury human hair extensions handpicked by Norhan. Ethically sourced, salon-quality, undetectable.</p>
+      </div>
+      <div>
+        <p class="lys-footer__col-head">Shop</p>
+        <ul class="lys-footer__links">
+          <li><a href="/collections/tape-in">Tape-In Extensions</a></li>
+          <li><a href="/collections/clip-in">Clip-In Extensions</a></li>
+          <li><a href="/collections/weft">Weft Extensions</a></li>
+          <li><a href="/collections/all">All Products</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="lys-footer__col-head">Help</p>
+        <ul class="lys-footer__links">
+          <li><a href="/pages/shade-quiz">Shade Quiz</a></li>
+          <li><a href="/pages/faq">FAQ</a></li>
+          <li><a href="/pages/shipping">Shipping & Returns</a></li>
+          <li><a href="/pages/contact">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="lys-footer__col-head">Follow</p>
+        <ul class="lys-footer__links">
+          <li><a href="https://instagram.com/lyshairbynorhan" target="_blank">Instagram</a></li>
+          <li><a href="https://tiktok.com/@lyshairbynorhan" target="_blank">TikTok</a></li>
+          <li><a href="https://youtube.com/@lyshairbynorhan" target="_blank">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="lys-footer__bottom">
+      <span>© {{ 'now' | date: '%Y' }} LYS Hair by Norhan. All rights reserved.</span>
+      <span>Free shipping on orders over $150 · 30-day returns</span>
+    </div>
+  </footer>
+
+  {% render 'cart-drawer' %}
+  {% render 'fomo-popup' %}
+  {% render 'exit-intent' %}
+  {% render 'sticky-atc' %}
+
+  <script>
+  // Header scroll effect
+  (function(){
+    var h = document.getElementById('lys-header');
+    if(!h) return;
+    function check(){ h.classList.toggle('scrolled', window.scrollY > 40); }
+    window.addEventListener('scroll', check, { passive: true });
+    check();
+  })();
+
+  // Scroll reveal
+  (function(){
+    var els = document.querySelectorAll('.lys-reveal');
+    if(!els.length) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    els.forEach(function(el){ io.observe(el); });
+  })();
+
+  // Cart open
+  document.querySelectorAll('[data-cart-open],[href="/cart"]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      if(window.lysCartOpen) window.lysCartOpen();
+    });
+  });
+  </script>
+</body>
+</html>

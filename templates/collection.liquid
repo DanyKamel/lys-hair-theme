@@ -1,0 +1,23 @@
+{% layout 'theme' %}
+
+<div class="lys-collection" style="max-width:1200px;margin:0 auto;padding:60px 32px;">
+  <h1 class="lys-collection__title" style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:48px;color:#F5EFE6;margin-bottom:40px;">{{ collection.title }}</h1>
+  {% if collection.description != blank %}
+    <p style="color:rgba(245,239,230,0.7);margin-bottom:40px;">{{ collection.description }}</p>
+  {% endif %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:32px;">
+    {% for product in collection.products %}
+      <a href="{{ product.url }}" style="text-decoration:none;color:inherit;">
+        <div class="lys-product-card" style="background:#2E2820;overflow:hidden;">
+          {% if product.featured_image %}
+            <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}" style="width:100%;aspect-ratio:1;object-fit:cover;">
+          {% endif %}
+          <div style="padding:20px;">
+            <p style="font-family:'Jost',sans-serif;font-size:14px;color:#F5EFE6;margin-bottom:8px;">{{ product.title }}</p>
+            <p style="color:#C9A97A;font-weight:500;">{{ product.price | money }}</p>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</div>

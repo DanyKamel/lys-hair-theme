@@ -1,0 +1,165 @@
+{% comment %}LYS HAIR — AI Video Showcase Section{% endcomment %}
+
+<section class="lys-vid">
+  <div class="lys-vid__inner">
+    <div class="lys-vid__head">
+      <span class="lys-vid__eyebrow">{{ section.settings.eyebrow | default: 'THE TRANSFORMATION' }}</span>
+      <h2 class="lys-vid__title">{{ section.settings.title | default: 'Watch the magic happen' }}</h2>
+      <p class="lys-vid__sub">{{ section.settings.subtitle | default: 'From thin & flat to full & voluminous — in under 60 minutes.' }}</p>
+    </div>
+
+    <div class="lys-vid__grid">
+      {% for block in section.blocks %}
+        <div class="lys-vid__item {{ block.settings.size }}" {{ block.shopify_attributes }}>
+          <div class="lys-vid__thumb">
+            {% if block.settings.video_url != blank %}
+              <div class="lys-vid__embed" data-src="{{ block.settings.video_url }}">
+                <img
+                  src="{% if block.settings.thumb %}{{ block.settings.thumb | image_url: width: 900 }}{% else %}https://images.unsplash.com/photo-1634449571017-5fecfd26ad76?w=900&q=85&fit=crop{% endif %}"
+                  alt="{{ block.settings.label }}"
+                  loading="lazy"
+                >
+                <button class="lys-vid__play" aria-label="Play video">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#0E0A07"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+              </div>
+            {% else %}
+              <img
+                src="{% if block.settings.thumb %}{{ block.settings.thumb | image_url: width: 900 }}{% else %}https://images.unsplash.com/photo-{{ block.settings.fallback_id | default: '1522337360788-8b13dee7a37e' }}?w=900&q=85&fit=crop{% endif %}"
+                alt="{{ block.settings.label }}"
+                loading="lazy"
+              >
+            {% endif %}
+            <div class="lys-vid__badge">{{ block.settings.label | default: 'Transformation' }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+.lys-vid { padding: 110px 0; background: #0E0A07; color: #F5EFE6; }
+.lys-vid__inner { max-width: 1400px; margin: 0 auto; padding: 0 32px; }
+.lys-vid__head { text-align: center; margin-bottom: 64px; }
+.lys-vid__eyebrow {
+  display: block; font-family: 'Jost',sans-serif;
+  font-size: 11px; letter-spacing: .4em; color: #C9A97A; margin-bottom: 18px;
+}
+.lys-vid__title {
+  font-family: 'Cormorant Garamond',serif; font-weight: 300;
+  font-size: clamp(38px,5vw,64px); margin: 0 0 16px; letter-spacing: -.01em;
+}
+.lys-vid__sub { color: rgba(245,239,230,.65); font-family:'Jost',sans-serif; font-size:16px; }
+.lys-vid__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 6px;
+}
+@media(max-width:768px){ .lys-vid__grid { grid-template-columns: 1fr; } }
+.lys-vid__item.wide { grid-column: span 2; }
+.lys-vid__item.tall { grid-row: span 2; }
+.lys-vid__thumb {
+  position: relative; overflow: hidden;
+  aspect-ratio: 16/9; background: #1A1410;
+}
+.lys-vid__item.tall .lys-vid__thumb { aspect-ratio: 9/16; }
+.lys-vid__thumb img,
+.lys-vid__embed img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .7s ease;
+  display: block;
+}
+.lys-vid__thumb:hover img { transform: scale(1.06); }
+.lys-vid__embed { position: relative; width:100%; height:100%; cursor:pointer; }
+.lys-vid__play {
+  position: absolute; top:50%; left:50%;
+  transform: translate(-50%,-50%);
+  width: 68px; height: 68px;
+  background: #C9A97A; border-radius: 50%; border: none;
+  display: flex; align-items:center; justify-content:center;
+  cursor: pointer; transition: all .2s;
+  box-shadow: 0 0 0 0 rgba(201,169,122,.4);
+  animation: lysPulse 2s infinite;
+}
+.lys-vid__play:hover { transform: translate(-50%,-50%) scale(1.12); background: #D9BC8E; }
+.lys-vid__badge {
+  position: absolute; bottom: 16px; left: 16px;
+  background: rgba(14,10,7,.8); backdrop-filter: blur(8px);
+  color: #C9A97A; font-family:'Jost',sans-serif;
+  font-size: 11px; letter-spacing: .2em; padding: 7px 14px;
+  text-transform: uppercase;
+}
+@keyframes lysPulse {
+  0% { box-shadow: 0 0 0 0 rgba(201,169,122,.5); }
+  70% { box-shadow: 0 0 0 18px rgba(201,169,122,0); }
+  100% { box-shadow: 0 0 0 0 rgba(201,169,122,0); }
+}
+.lys-vid__lightbox {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,.95); display:flex; align-items:center; justify-content:center;
+}
+.lys-vid__lightbox iframe {
+  width: min(900px, 90vw); height: min(506px, 50.6vw);
+  border: none;
+}
+.lys-vid__lightbox-close {
+  position: absolute; top: 24px; right: 24px;
+  background: none; border: none; color: #F5EFE6;
+  font-size: 32px; cursor: pointer; line-height: 1;
+}
+</style>
+
+<script>
+(function(){
+  document.querySelectorAll('.lys-vid__embed').forEach(function(embed){
+    embed.addEventListener('click', function(){
+      var src = embed.getAttribute('data-src');
+      if(!src) return;
+      var lb = document.createElement('div');
+      lb.className = 'lys-vid__lightbox';
+      lb.innerHTML = '<iframe src="'+src+'?autoplay=1" allow="autoplay; fullscreen"></iframe><button class="lys-vid__lightbox-close" aria-label="Close">✕</button>';
+      document.body.appendChild(lb);
+      lb.querySelector('.lys-vid__lightbox-close').addEventListener('click', function(){ lb.remove(); });
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Video Showcase",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "THE TRANSFORMATION" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Watch the magic happen" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "From thin & flat to full & voluminous — in under 60 minutes." }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video / Photo",
+      "settings": [
+        { "type": "text", "id": "video_url", "label": "Video URL (Vimeo or YouTube embed URL)", "info": "Paste the embed URL e.g. https://player.vimeo.com/video/ID" },
+        { "type": "image_picker", "id": "thumb", "label": "Thumbnail image" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Tape-In Application" },
+        { "type": "select", "id": "size", "label": "Grid size", "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "wide", "label": "Wide (2 columns)" },
+          { "value": "tall", "label": "Tall (2 rows)" }
+        ], "default": "normal" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [{
+    "name": "Video Showcase",
+    "blocks": [
+      { "type": "video", "settings": { "label": "Tape-In Application", "size": "wide" } },
+      { "type": "video", "settings": { "label": "Colour Match", "size": "normal" } },
+      { "type": "video", "settings": { "label": "Styling Tutorial", "size": "normal" } },
+      { "type": "video", "settings": { "label": "Before & After", "size": "normal" } }
+    ]
+  }]
+}
+{% endschema %}

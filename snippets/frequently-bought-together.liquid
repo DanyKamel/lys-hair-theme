@@ -1,0 +1,150 @@
+{% comment %}
+  LYS HAIR — Frequently Bought Together
+  Bundle the current product with 2 complementary items at a discount
+  Psychology: Anchoring (show total saving), bundle pricing, cross-sell
+{% endcomment %}
+
+{% assign companion1 = collections.frequently-bought.products[0] %}
+{% assign companion2 = collections.frequently-bought.products[1] %}
+{% assign bundle_total = product.price | plus: companion1.price | plus: companion2.price %}
+{% assign bundle_discount = bundle_total | times: 15 | divided_by: 100 %}
+{% assign bundle_price = bundle_total | minus: bundle_discount %}
+
+<div class="lys-fbt">
+  <h3 class="lys-fbt__title">Frequently Bought Together</h3>
+  <p class="lys-fbt__sub">Save 15% when you buy the complete set</p>
+
+  <div class="lys-fbt__grid">
+    <label class="lys-fbt__item">
+      <input type="checkbox" checked disabled>
+      <img src="{{ product.featured_image | image_url: width: 200 }}" alt="">
+      <p>{{ product.title }}</p>
+      <small>{{ product.price | money }}</small>
+    </label>
+    <span class="lys-fbt__plus">+</span>
+    {% if companion1 %}
+      <label class="lys-fbt__item">
+        <input type="checkbox" data-fbt-id="{{ companion1.variants.first.id }}" checked>
+        <img src="{{ companion1.featured_image | image_url: width: 200 }}" alt="">
+        <p>{{ companion1.title }}</p>
+        <small>{{ companion1.price | money }}</small>
+      </label>
+      <span class="lys-fbt__plus">+</span>
+    {% endif %}
+    {% if companion2 %}
+      <label class="lys-fbt__item">
+        <input type="checkbox" data-fbt-id="{{ companion2.variants.first.id }}" checked>
+        <img src="{{ companion2.featured_image | image_url: width: 200 }}" alt="">
+        <p>{{ companion2.title }}</p>
+        <small>{{ companion2.price | money }}</small>
+      </label>
+    {% endif %}
+  </div>
+
+  <div class="lys-fbt__footer">
+    <div>
+      <span class="lys-fbt__total-label">Bundle total</span>
+      <span class="lys-fbt__total">{{ bundle_price | money }}</span>
+      <span class="lys-fbt__strike">{{ bundle_total | money }}</span>
+    </div>
+    <button class="lys-btn lys-btn--primary" id="lys-fbt-add">ADD ALL 3 TO BAG</button>
+  </div>
+</div>
+
+<style>
+  .lys-fbt {
+    margin: 40px 0;
+    padding: 32px;
+    background: #F5EFE6;
+    border-left: 3px solid #C9A97A;
+  }
+  .lys-fbt__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin: 0 0 6px;
+    color: #1A1410;
+  }
+  .lys-fbt__sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: #A89070;
+    margin: 0 0 20px;
+  }
+  .lys-fbt__grid {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .lys-fbt__item {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+  }
+  .lys-fbt__item img {
+    width: 100%; aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .lys-fbt__item p {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    margin: 8px 0 2px;
+  }
+  .lys-fbt__item small {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: #C9A97A;
+  }
+  .lys-fbt__plus {
+    font-family: 'Jost', sans-serif;
+    font-size: 24px;
+    color: #C9A97A;
+  }
+  .lys-fbt__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .lys-fbt__total-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #A89070;
+    display: block;
+  }
+  .lys-fbt__total {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: #1A1410;
+    margin-right: 8px;
+  }
+  .lys-fbt__strike {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    color: #A89070;
+    text-decoration: line-through;
+  }
+</style>
+
+<script>
+  (function() {
+    const btn = document.getElementById('lys-fbt-add');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const items = [{ id: {{ product.selected_or_first_available_variant.id }}, quantity: 1 }];
+      document.querySelectorAll('[data-fbt-id]').forEach(c => {
+        if (c.checked) items.push({ id: parseInt(c.dataset.fbtId), quantity: 1 });
+      });
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+      if (window.lysCartOpen) window.lysCartOpen();
+    });
+  })();
+</script>

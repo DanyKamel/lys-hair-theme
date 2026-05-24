@@ -1,0 +1,159 @@
+{% comment %}
+  LYS HAIR — Bundle Builder
+  Tiered volume discount: buy 2 save 15%, buy 3 save 25%
+  Psychology: Anchoring (show saving), commitment escalation, perceived value
+{% endcomment %}
+
+<section class="lys-bundle">
+  <div class="lys-bundle__inner">
+    <div class="lys-bundle__head">
+      <span class="lys-bundle__eyebrow">BUNDLE & SAVE</span>
+      <h2 class="lys-bundle__title">{{ section.settings.title }}</h2>
+      <p class="lys-bundle__sub">{{ section.settings.subtitle }}</p>
+    </div>
+
+    <div class="lys-bundle__tiers">
+      <label class="lys-bundle__tier">
+        <input type="radio" name="bundle-tier" value="1">
+        <div class="lys-bundle__tier-body">
+          <div class="lys-bundle__tier-label">1 PACK</div>
+          <div class="lys-bundle__tier-price">$189</div>
+          <div class="lys-bundle__tier-save">—</div>
+        </div>
+      </label>
+      <label class="lys-bundle__tier is-popular">
+        <span class="lys-bundle__tier-badge">MOST POPULAR</span>
+        <input type="radio" name="bundle-tier" value="2" checked>
+        <div class="lys-bundle__tier-body">
+          <div class="lys-bundle__tier-label">2 PACKS</div>
+          <div class="lys-bundle__tier-price">$321 <small>$378</small></div>
+          <div class="lys-bundle__tier-save">SAVE 15% · $57 OFF</div>
+        </div>
+      </label>
+      <label class="lys-bundle__tier is-best">
+        <span class="lys-bundle__tier-badge lys-bundle__tier-badge--best">BEST VALUE</span>
+        <input type="radio" name="bundle-tier" value="3">
+        <div class="lys-bundle__tier-body">
+          <div class="lys-bundle__tier-label">3 PACKS</div>
+          <div class="lys-bundle__tier-price">$425 <small>$567</small></div>
+          <div class="lys-bundle__tier-save">SAVE 25% · $142 OFF</div>
+        </div>
+      </label>
+    </div>
+
+    <button class="lys-btn lys-btn--primary lys-btn--block lys-bundle__cta">
+      ADD BUNDLE TO BAG
+    </button>
+
+    <p class="lys-bundle__note">
+      ✦ Free shipping · 30-day returns · Afterpay & Klarna at checkout
+    </p>
+  </div>
+</section>
+
+<style>
+  .lys-bundle {
+    padding: 80px 0;
+    background: #FFFFFF;
+    font-family: 'Jost', sans-serif;
+  }
+  .lys-bundle__inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .lys-bundle__head { text-align: center; margin-bottom: 40px; }
+  .lys-bundle__eyebrow {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #C9A97A;
+    margin-bottom: 16px;
+  }
+  .lys-bundle__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 300;
+    margin: 0 0 12px;
+    color: #1A1410;
+  }
+  .lys-bundle__sub {
+    font-size: 14px;
+    color: #A89070;
+    margin: 0;
+  }
+  .lys-bundle__tiers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 600px) { .lys-bundle__tiers { grid-template-columns: 1fr; } }
+  .lys-bundle__tier {
+    position: relative;
+    cursor: pointer;
+    border: 2px solid #F5EFE6;
+    padding: 24px 20px;
+    transition: all 0.3s;
+    display: block;
+  }
+  .lys-bundle__tier:has(input:checked) {
+    border-color: #C9A97A;
+    background: rgba(201, 169, 122, 0.05);
+  }
+  .lys-bundle__tier input { position: absolute; opacity: 0; }
+  .lys-bundle__tier-badge {
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    background: #1A1410;
+    color: #F5EFE6;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    padding: 4px 10px;
+  }
+  .lys-bundle__tier-badge--best { background: #C9A97A; color: #1A1410; }
+  .lys-bundle__tier-body { text-align: center; }
+  .lys-bundle__tier-label {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: #A89070;
+    margin-bottom: 10px;
+  }
+  .lys-bundle__tier-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: #1A1410;
+    margin-bottom: 6px;
+  }
+  .lys-bundle__tier-price small {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #A89070;
+    text-decoration: line-through;
+    margin-left: 4px;
+  }
+  .lys-bundle__tier-save {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #C9A97A;
+  }
+  .lys-bundle__cta { margin-top: 8px; }
+  .lys-bundle__note {
+    text-align: center;
+    font-size: 12px;
+    color: #A89070;
+    margin-top: 16px;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Bundle Builder",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Buy more, save more" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Stock up on your shade — extensions last 12+ months when bundled" }
+  ],
+  "presets": [{ "name": "Bundle Builder" }]
+}
+{% endschema %}

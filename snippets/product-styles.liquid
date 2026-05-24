@@ -1,0 +1,268 @@
+{% comment %}
+  LYS HAIR — Product Page Styles
+  Scoped to .lys-product to avoid theme conflicts
+{% endcomment %}
+
+<style>
+  .lys-product {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    font-family: 'Jost', sans-serif;
+    color: #1A1410;
+  }
+  .lys-product__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+  }
+  @media (max-width: 900px) {
+    .lys-product__grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  /* Gallery */
+  .lys-product__main-img {
+    position: relative;
+    overflow: hidden;
+    background: #F5EFE6;
+  }
+  .lys-product__main-img img {
+    width: 100%; display: block;
+    transition: transform 0.6s ease;
+  }
+  .lys-product__main-img:hover img { transform: scale(1.04); }
+  .lys-badge {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: #C9A97A;
+    color: #1A1410;
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .lys-product__thumbs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .lys-thumb {
+    background: none;
+    border: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border 0.2s;
+  }
+  .lys-thumb.is-active { border-color: #C9A97A; }
+  .lys-thumb img { width: 100%; display: block; aspect-ratio: 1; object-fit: cover; }
+
+  /* Info */
+  .lys-product__breadcrumb {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #A89070;
+    margin-bottom: 16px;
+  }
+  .lys-product__breadcrumb a { color: #A89070; text-decoration: none; }
+  .lys-product__breadcrumb a:hover { color: #C9A97A; }
+
+  .lys-product__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    line-height: 1.1;
+    margin: 0 0 12px;
+    color: #1A1410;
+  }
+  .lys-product__rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .lys-stars { color: #C9A97A; letter-spacing: 2px; font-size: 16px; }
+  .lys-product__review-link {
+    font-size: 12px;
+    color: #A89070;
+    text-decoration: underline;
+  }
+
+  .lys-product__price {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .lys-price--sale {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: #1A1410;
+  }
+  .lys-price--compare {
+    font-size: 18px;
+    color: #A89070;
+    text-decoration: line-through;
+  }
+  .lys-price--save {
+    background: #C9A97A;
+    color: #1A1410;
+    padding: 4px 10px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .lys-product__installments {
+    font-size: 13px;
+    color: #A89070;
+    margin-bottom: 28px;
+  }
+
+  /* Options */
+  .lys-option { margin-bottom: 20px; }
+  .lys-option__label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1A1410;
+    margin-bottom: 10px;
+  }
+  .lys-option__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .lys-swatch {
+    background: #FFFFFF;
+    border: 1px solid #2E2820;
+    padding: 10px 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lys-swatch:hover { border-color: #C9A97A; }
+  .lys-swatch.is-active {
+    background: #1A1410;
+    color: #F5EFE6;
+    border-color: #1A1410;
+  }
+
+  /* Scarcity + viewers */
+  .lys-scarcity {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(220, 60, 60, 0.08);
+    border-left: 3px solid #DC3C3C;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  .lys-scarcity__dot {
+    width: 8px; height: 8px;
+    background: #DC3C3C;
+    border-radius: 50%;
+    animation: lysPulse 1.4s infinite;
+  }
+  @keyframes lysPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+  .lys-viewers {
+    font-size: 12px;
+    color: #A89070;
+    margin: 10px 0 20px;
+  }
+  .lys-viewers__eye { color: #C9A97A; }
+
+  /* Quantity */
+  .lys-qty {
+    display: inline-flex;
+    border: 1px solid #2E2820;
+    margin-bottom: 16px;
+  }
+  .lys-qty__btn {
+    background: none;
+    border: none;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  .lys-qty__input {
+    width: 48px;
+    border: none;
+    border-left: 1px solid #2E2820;
+    border-right: 1px solid #2E2820;
+    text-align: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+  }
+  .lys-qty__input::-webkit-inner-spin-button { display: none; }
+
+  /* Buttons (extends hero buttons) */
+  .lys-btn--block { display: block; width: 100%; text-align: center; box-sizing: border-box; }
+  .lys-btn--dark { background: #1A1410; color: #F5EFE6; border-color: #1A1410; }
+  .lys-btn--dark:hover { background: #2E2820; }
+
+  /* Trust row */
+  .lys-trust {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 28px 0;
+    padding: 20px;
+    background: #F5EFE6;
+  }
+  .lys-trust__item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+  }
+  .lys-trust__item > span:first-child {
+    font-size: 22px;
+    color: #C9A97A;
+  }
+  .lys-trust__item strong { display: block; color: #1A1410; }
+  .lys-trust__item small { display: block; color: #A89070; font-size: 11px; }
+
+  /* Accordion */
+  .lys-accordion details {
+    border-top: 1px solid #2E2820;
+    padding: 0;
+  }
+  .lys-accordion details:last-child { border-bottom: 1px solid #2E2820; }
+  .lys-accordion summary {
+    padding: 18px 0;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: #1A1410;
+    list-style: none;
+    position: relative;
+    padding-right: 30px;
+  }
+  .lys-accordion summary::-webkit-details-marker { display: none; }
+  .lys-accordion summary::after {
+    content: '+';
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    color: #C9A97A;
+    font-size: 20px;
+    transition: transform 0.3s;
+  }
+  .lys-accordion details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+  .lys-accordion__body {
+    padding: 0 0 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #2E2820;
+  }
+  .lys-accordion__body a { color: #C9A97A; }
+</style>

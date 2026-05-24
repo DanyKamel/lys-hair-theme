@@ -1,0 +1,317 @@
+{% comment %}
+  LYS HAIR — Slide-Out Cart Drawer
+  Includes: free shipping progress, recommended upsells, trust badges,
+  Afterpay/Klarna messaging, gift note
+{% endcomment %}
+
+<aside class="lys-cart" id="lys-cart" aria-hidden="true">
+  <div class="lys-cart__backdrop" data-cart-close></div>
+  <div class="lys-cart__drawer">
+    <header class="lys-cart__head">
+      <h3>Your Bag <span class="lys-cart__count">{{ cart.item_count }}</span></h3>
+      <button class="lys-cart__close" data-cart-close aria-label="Close">×</button>
+    </header>
+
+    <div class="lys-cart__progress">
+      {% render 'free-shipping-progress' %}
+    </div>
+
+    <div class="lys-cart__items" id="lys-cart-items">
+      {% if cart.item_count > 0 %}
+        {% for item in cart.items %}
+          <div class="lys-cart-item" data-key="{{ item.key }}">
+            <a href="{{ item.url }}" class="lys-cart-item__img">
+              <img src="{{ item.image | image_url: width: 200 }}" alt="{{ item.title }}">
+            </a>
+            <div class="lys-cart-item__info">
+              <a href="{{ item.url }}" class="lys-cart-item__title">{{ item.product.title }}</a>
+              <p class="lys-cart-item__variant">{{ item.variant.title }}</p>
+              <div class="lys-cart-item__qty">
+                <button data-qty-change="-1" data-key="{{ item.key }}">−</button>
+                <span>{{ item.quantity }}</span>
+                <button data-qty-change="1" data-key="{{ item.key }}">+</button>
+              </div>
+            </div>
+            <div class="lys-cart-item__right">
+              <p class="lys-cart-item__price">{{ item.final_line_price | money }}</p>
+              <button class="lys-cart-item__remove" data-remove="{{ item.key }}">Remove</button>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="lys-cart__empty">
+          <p>Your bag is empty.</p>
+          <a href="/collections/all" class="lys-btn lys-btn--ghost">Shop Extensions</a>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if cart.item_count > 0 %}
+      <div class="lys-cart__upsell">
+        <p class="lys-cart__upsell-label">Complete your set ✦</p>
+        <div class="lys-cart__upsell-grid">
+          {% for product in collections.upsells.products limit: 3 %}
+            <div class="lys-cart-upsell-item">
+              <img src="{{ product.featured_image | image_url: width: 200 }}" alt="">
+              <p>{{ product.title }}</p>
+              <small>{{ product.price | money }}</small>
+              <button data-quick-add="{{ product.variants.first.id }}">+ Add</button>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <label class="lys-cart__gift">
+        <input type="checkbox" data-gift-toggle> Add a gift note
+        <textarea data-gift-note placeholder="Write a message..." hidden></textarea>
+      </label>
+
+      <footer class="lys-cart__foot">
+        <div class="lys-cart__subtotal">
+          <span>Subtotal</span>
+          <strong>{{ cart.total_price | money }}</strong>
+        </div>
+        <p class="lys-cart__installments">
+          or 4 payments of {{ cart.total_price | divided_by: 4.0 | money }} with <strong>Afterpay</strong>
+        </p>
+        <a href="/checkout" class="lys-btn lys-btn--primary lys-btn--block">CHECKOUT — {{ cart.total_price | money }}</a>
+        <div class="lys-cart__trust">
+          <span>🔒 Secure checkout</span>
+          <span>✦ Free returns</span>
+          <span>⚡ Ships in 24h</span>
+        </div>
+      </footer>
+    {% endif %}
+  </div>
+</aside>
+
+<style>
+  .lys-cart { position: fixed; inset: 0; z-index: 200; visibility: hidden; }
+  .lys-cart.is-open { visibility: visible; }
+  .lys-cart__backdrop {
+    position: absolute; inset: 0;
+    background: rgba(26, 20, 16, 0.5);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .lys-cart.is-open .lys-cart__backdrop { opacity: 1; }
+  .lys-cart__drawer {
+    position: absolute; right: 0; top: 0; height: 100%;
+    width: 440px; max-width: 100%;
+    background: #FFFFFF;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; flex-direction: column;
+    box-shadow: -8px 0 32px rgba(26, 20, 16, 0.12);
+  }
+  .lys-cart.is-open .lys-cart__drawer { transform: translateX(0); }
+  .lys-cart__head {
+    padding: 20px 24px;
+    border-bottom: 1px solid #2E2820;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .lys-cart__head h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+  }
+  .lys-cart__count {
+    background: #C9A97A;
+    color: #1A1410;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    padding: 2px 8px;
+    margin-left: 8px;
+  }
+  .lys-cart__close { background: none; border: none; font-size: 28px; cursor: pointer; color: #1A1410; }
+  .lys-cart__progress { padding: 0 24px; }
+  .lys-cart__items {
+    flex: 1; overflow-y: auto;
+    padding: 16px 24px;
+  }
+  .lys-cart-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid #F5EFE6;
+  }
+  .lys-cart-item__img img { width: 100%; height: 100px; object-fit: cover; }
+  .lys-cart-item__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: #1A1410;
+    text-decoration: none;
+    display: block;
+  }
+  .lys-cart-item__variant {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: #A89070;
+    margin: 4px 0 8px;
+  }
+  .lys-cart-item__qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #2E2820;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+  }
+  .lys-cart-item__qty button {
+    background: none; border: none; padding: 4px 10px; cursor: pointer;
+  }
+  .lys-cart-item__qty span { padding: 0 10px; }
+  .lys-cart-item__right { text-align: right; }
+  .lys-cart-item__price { font-family: 'Jost', sans-serif; font-weight: 500; margin: 0; }
+  .lys-cart-item__remove {
+    background: none; border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    color: #A89070;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .lys-cart__upsell { padding: 16px 24px; background: #F5EFE6; }
+  .lys-cart__upsell-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C9A97A;
+    margin: 0 0 12px;
+  }
+  .lys-cart__upsell-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .lys-cart-upsell-item { text-align: center; }
+  .lys-cart-upsell-item img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .lys-cart-upsell-item p { font-family: 'Jost', sans-serif; font-size: 11px; margin: 6px 0 2px; }
+  .lys-cart-upsell-item small { font-family: 'Jost', sans-serif; font-size: 11px; color: #C9A97A; }
+  .lys-cart-upsell-item button {
+    width: 100%; margin-top: 6px;
+    background: #1A1410; color: #F5EFE6;
+    border: none; padding: 6px;
+    font-family: 'Jost', sans-serif; font-size: 11px;
+    letter-spacing: 0.1em; cursor: pointer;
+  }
+  .lys-cart__gift {
+    padding: 12px 24px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    display: block;
+  }
+  .lys-cart__gift textarea {
+    width: 100%; margin-top: 8px;
+    border: 1px solid #2E2820;
+    padding: 8px;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+  .lys-cart__foot {
+    padding: 20px 24px;
+    border-top: 1px solid #2E2820;
+    background: #FFFFFF;
+  }
+  .lys-cart__subtotal {
+    display: flex; justify-content: space-between;
+    font-family: 'Jost', sans-serif; font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .lys-cart__subtotal strong { font-weight: 600; }
+  .lys-cart__installments {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px; color: #A89070;
+    margin: 0 0 14px;
+  }
+  .lys-cart__trust {
+    display: flex; justify-content: space-between;
+    margin-top: 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #A89070;
+    text-transform: uppercase;
+  }
+  .lys-cart__empty {
+    padding: 60px 24px;
+    text-align: center;
+    font-family: 'Jost', sans-serif;
+  }
+  .lys-cart__empty p { color: #A89070; margin-bottom: 20px; }
+</style>
+
+<script>
+  (function() {
+    const cart = document.getElementById('lys-cart');
+    if (!cart) return;
+
+    window.lysCartOpen = () => { cart.classList.add('is-open'); cart.setAttribute('aria-hidden', 'false'); };
+    const close = () => { cart.classList.remove('is-open'); cart.setAttribute('aria-hidden', 'true'); };
+
+    cart.querySelectorAll('[data-cart-close]').forEach(b => b.addEventListener('click', close));
+
+    // Attach to all "Add to Bag" forms — intercept and use Shopify Ajax API
+    document.querySelectorAll('form[action^="/cart/add"]').forEach(form => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const res = await fetch('/cart/add.js', { method: 'POST', body: fd });
+        if (res.ok) {
+          await refreshCart();
+          window.lysCartOpen();
+        }
+      });
+    });
+
+    // Quick add upsell
+    cart.querySelectorAll('[data-quick-add]').forEach(b => {
+      b.addEventListener('click', async () => {
+        const id = b.dataset.quickAdd;
+        await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id, quantity: 1 }] })
+        });
+        await refreshCart();
+      });
+    });
+
+    // Qty change
+    cart.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-qty-change]');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      const change = parseInt(btn.dataset.qtyChange);
+      const item = cart.querySelector(`[data-key="${key}"] .lys-cart-item__qty span`);
+      const newQty = parseInt(item.textContent) + change;
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: Math.max(0, newQty) })
+      });
+      await refreshCart();
+    });
+
+    // Remove
+    cart.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-remove]');
+      if (!btn) return;
+      await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: btn.dataset.remove, quantity: 0 })
+      });
+      await refreshCart();
+    });
+
+    async function refreshCart() {
+      const res = await fetch('/?section_id=cart-drawer');
+      const html = await res.text();
+      const parsed = new DOMParser().parseFromString(html, 'text/html');
+      const newDrawer = parsed.querySelector('#lys-cart .lys-cart__drawer');
+      if (newDrawer) cart.querySelector('.lys-cart__drawer').innerHTML = newDrawer.innerHTML;
+    }
+  })();
+</script>

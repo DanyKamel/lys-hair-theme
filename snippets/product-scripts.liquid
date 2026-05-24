@@ -1,0 +1,79 @@
+{% comment %}
+  LYS HAIR — Product Page Scripts
+  Variant switching, gallery, qty, viewer count, ATC handler
+{% endcomment %}
+
+<script>
+  (function() {
+    const productData = {{ product | json }};
+    const variants = productData.variants;
+
+    // === Gallery ===
+    document.querySelectorAll('.lys-thumb').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.lys-thumb').forEach(x => x.classList.remove('is-active'));
+        t.classList.add('is-active');
+        document.getElementById('lys-main-img').src = t.dataset.img;
+      });
+    });
+
+    // === Variant selector ===
+    const selected = {};
+    productData.options.forEach((opt, i) => {
+      selected[opt] = productData.variants[0].options[i];
+    });
+
+    document.querySelectorAll('.lys-swatch').forEach(s => {
+      s.addEventListener('click', () => {
+        const name = s.dataset.optionName;
+        const value = s.dataset.optionValue;
+        selected[name] = value;
+        document.querySelectorAll(`.lys-swatch[data-option-name="${name}"]`).forEach(x => x.classList.remove('is-active'));
+        s.classList.add('is-active');
+        const label = document.querySelector(`[data-selected="${name}"]`);
+        if (label) label.textContent = value;
+
+        const match = variants.find(v => {
+          return productData.options.every((opt, i) => v.options[i] === selected[opt]);
+        });
+        if (match) {
+          document.getElementById('lys-variant-id').value = match.id;
+          const atc = document.querySelector('#lys-atc span');
+          if (atc) {
+            const price = (match.price / 100).toLocaleString('en-AU', { style: 'currency', currency: 'AUD' });
+            atc.textContent = match.available ? `Add to Bag — ${price}` : 'Sold Out';
+          }
+        }
+      });
+    });
+
+    // === Quantity ===
+    document.querySelectorAll('[data-qty]').forEach(b => {
+      b.addEventListener('click', () => {
+        const input = document.querySelector('.lys-qty__input');
+        const change = parseInt(b.dataset.qty);
+        input.value = Math.max(1, parseInt(input.value) + change);
+      });
+    });
+
+    // === Viewer count animation ===
+    const viewerEl = document.querySelector('[data-viewers]');
+    if (viewerEl) {
+      let v = 12 + Math.floor(Math.random() * 18);
+      viewerEl.textContent = v;
+      setInterval(() => {
+        v += Math.random() > 0.5 ? 1 : -1;
+        v = Math.max(8, Math.min(42, v));
+        viewerEl.textContent = v;
+      }, 4500);
+    }
+
+    // === Buy Now (Shop Pay direct) ===
+    document.getElementById('lys-buy-now')?.addEventListener('click', () => {
+      const form = document.getElementById('lys-add-form');
+      const fd = new FormData(form);
+      fetch('/cart/add.js', { method: 'POST', body: fd })
+        .then(() => window.location.href = '/checkout');
+    });
+  })();
+</script>

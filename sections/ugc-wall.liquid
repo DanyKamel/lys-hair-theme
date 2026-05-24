@@ -1,0 +1,129 @@
+{% comment %}LYS HAIR — UGC / Instagram Wall (premium rebuild){% endcomment %}
+
+<section class="lys-ugc">
+  <div class="lys-ugc__top">
+    <span class="lys-ugc__eyebrow">{{ section.settings.eyebrow | default: 'AS WORN BY' }}</span>
+    <h2 class="lys-ugc__title">{{ section.settings.title | default: 'Real women. Real results.' }}</h2>
+    <a href="{{ section.settings.handle_url | default: 'https://instagram.com' }}" class="lys-ugc__ig" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      {{ section.settings.handle | default: '@lyshairbynorhan' }}
+    </a>
+  </div>
+
+  <div class="lys-ugc__masonry">
+    {%- assign fallbacks = 'photo-1524157908232-f591d969233b,photo-1557353425-c6646a8809ce,photo-1558622625-697f40efc834,photo-1500917293891-ef795e70e1f6,photo-1634449571017-5fecfd26ad76,photo-1707979577466-2d6109c68a45,photo-1618566909269-a09202832ac6,photo-1685157713304-977307f78ef7,photo-1524157908232-f591d969233b,photo-1522337360788-8b13dee7a37e,photo-1557353425-c6646a8809ce,photo-1558622625-697f40efc834' | split: ',' -%}
+    {% for block in section.blocks %}
+      {%- assign fb = fallbacks[forloop.index0] -%}
+      <a href="{{ block.settings.product_url | default: '#' }}" class="lys-ugc__item" {{ block.shopify_attributes }}>
+        <img
+          src="{% if block.settings.image %}{{ block.settings.image | image_url: width: 600 }}{% else %}https://images.unsplash.com/{{ fb }}?w=600&q=85&fit=crop{% endif %}"
+          alt="{{ block.settings.handle | default: 'LYS Hair customer' }}"
+          loading="lazy"
+        >
+        <div class="lys-ugc__overlay">
+          <span class="lys-ugc__shop">SHOP THE LOOK</span>
+          <small>@{{ block.settings.handle | default: 'lyshair' }}</small>
+        </div>
+        {% if block.settings.video_url != blank %}
+          <span class="lys-ugc__reel-badge">▶ REEL</span>
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="lys-ugc__cta-wrap">
+    <a href="{{ section.settings.handle_url | default: '#' }}" class="lys-btn lys-btn--ghost" target="_blank">
+      See all on Instagram
+    </a>
+  </div>
+</section>
+
+<style>
+.lys-ugc { padding: 100px 0; background: #F8F4EF; }
+.lys-ugc__top { text-align: center; padding: 0 24px; margin-bottom: 56px; }
+.lys-ugc__eyebrow {
+  display: block; font-family:'Jost',sans-serif;
+  font-size: 11px; letter-spacing: .4em; color: #C9A97A; margin-bottom: 16px;
+}
+.lys-ugc__title {
+  font-family:'Cormorant Garamond',serif; font-weight: 300;
+  font-size: clamp(36px,5vw,58px); color: #1A1410; margin: 0 0 18px;
+}
+.lys-ugc__ig {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family:'Jost',sans-serif; font-size: 13px; letter-spacing:.1em;
+  color: #C9A97A; text-decoration: none;
+}
+.lys-ugc__masonry {
+  column-count: 4;
+  column-gap: 6px;
+  padding: 0 6px;
+}
+@media(max-width:900px){ .lys-ugc__masonry { column-count: 3; } }
+@media(max-width:600px){ .lys-ugc__masonry { column-count: 2; } }
+.lys-ugc__item {
+  display: block; position: relative;
+  overflow: hidden; margin-bottom: 6px;
+  break-inside: avoid;
+  cursor: pointer;
+}
+.lys-ugc__item img {
+  width: 100%; display: block;
+  transition: transform .6s ease;
+}
+.lys-ugc__item:hover img { transform: scale(1.06); }
+.lys-ugc__overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(0deg, rgba(14,10,7,.75) 0%, rgba(14,10,7,.1) 60%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end;
+  padding-bottom: 20px;
+  opacity: 0; transition: opacity .3s;
+}
+.lys-ugc__item:hover .lys-ugc__overlay { opacity: 1; }
+.lys-ugc__shop {
+  font-family:'Jost',sans-serif; font-size: 11px;
+  letter-spacing: .2em; color: #C9A97A; margin-bottom: 5px;
+}
+.lys-ugc__overlay small { font-size: 11px; color: #F5EFE6; font-family:'Jost',sans-serif; }
+.lys-ugc__reel-badge {
+  position: absolute; top: 12px; right: 12px;
+  background: #C9A97A; color: #0E0A07;
+  font-family:'Jost',sans-serif; font-size: 9px;
+  letter-spacing: .15em; padding: 4px 8px;
+}
+.lys-ugc__cta-wrap { text-align: center; margin-top: 52px; }
+.lys-ugc .lys-btn--ghost {
+  border-color: #1A1410; color: #1A1410;
+}
+.lys-ugc .lys-btn--ghost:hover { background: #1A1410; color: #F5EFE6; }
+</style>
+
+{% schema %}
+{
+  "name": "UGC Wall",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "AS WORN BY" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Real women. Real results." },
+    { "type": "text", "id": "handle", "label": "Instagram handle", "default": "@lyshairbynorhan" },
+    { "type": "url", "id": "handle_url", "label": "Instagram URL" }
+  ],
+  "blocks": [{
+    "type": "post", "name": "Post",
+    "settings": [
+      { "type": "image_picker", "id": "image", "label": "Photo" },
+      { "type": "text", "id": "video_url", "label": "Reel URL (optional)" },
+      { "type": "text", "id": "handle", "label": "Customer handle", "default": "sarah_m" },
+      { "type": "url", "id": "product_url", "label": "Product link" }
+    ]
+  }],
+  "max_blocks": 12,
+  "presets": [{
+    "name": "UGC Wall",
+    "blocks": [
+      {"type":"post"},{"type":"post"},{"type":"post"},{"type":"post"},
+      {"type":"post"},{"type":"post"},{"type":"post"},{"type":"post"}
+    ]
+  }]
+}
+{% endschema %}

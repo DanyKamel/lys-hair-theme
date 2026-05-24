@@ -1,0 +1,140 @@
+{% comment %}
+  LYS HAIR — Before / After Slider
+  Interactive draggable slider showing transformation
+  Psychology: Proof of outcome, vivid demonstration
+{% endcomment %}
+
+<section class="lys-ba">
+  <div class="lys-ba__inner">
+    <div class="lys-ba__head">
+      <span class="lys-ba__eyebrow">THE TRANSFORMATION</span>
+      <h2 class="lys-ba__title">{{ section.settings.title }}</h2>
+      <p class="lys-ba__sub">{{ section.settings.subtitle }}</p>
+    </div>
+
+    <div class="lys-ba__slider" id="lys-ba-slider">
+      <img src="{{ section.settings.after | image_url: width: 1400 }}" class="lys-ba__img lys-ba__img--after" alt="After">
+      <div class="lys-ba__before-wrap">
+        <img src="{{ section.settings.before | image_url: width: 1400 }}" class="lys-ba__img lys-ba__img--before" alt="Before">
+      </div>
+      <div class="lys-ba__handle" data-handle>
+        <span class="lys-ba__handle-line"></span>
+        <span class="lys-ba__handle-circle">‹ ›</span>
+      </div>
+      <span class="lys-ba__label lys-ba__label--before">BEFORE</span>
+      <span class="lys-ba__label lys-ba__label--after">AFTER</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lys-ba { padding: 100px 0; background: #1A1410; color: #F5EFE6; font-family: 'Jost', sans-serif; }
+  .lys-ba__inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .lys-ba__head { text-align: center; margin-bottom: 50px; }
+  .lys-ba__eyebrow {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #C9A97A;
+    margin-bottom: 16px;
+  }
+  .lys-ba__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    margin: 0 0 14px;
+  }
+  .lys-ba__sub { color: rgba(245,239,230,0.7); margin: 0; }
+  .lys-ba__slider {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/2;
+    overflow: hidden;
+    cursor: ew-resize;
+    user-select: none;
+  }
+  .lys-ba__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .lys-ba__before-wrap {
+    position: absolute; inset: 0;
+    width: 50%;
+    overflow: hidden;
+  }
+  .lys-ba__before-wrap .lys-ba__img--before {
+    width: 200vw;
+    max-width: 1100px;
+  }
+  .lys-ba__handle {
+    position: absolute;
+    left: 50%; top: 0;
+    width: 4px; height: 100%;
+    background: #C9A97A;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+  .lys-ba__handle-circle {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px; height: 48px;
+    background: #C9A97A;
+    color: #1A1410;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .lys-ba__label {
+    position: absolute;
+    top: 20px;
+    background: rgba(26, 20, 16, 0.7);
+    color: #F5EFE6;
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    z-index: 1;
+  }
+  .lys-ba__label--before { left: 20px; }
+  .lys-ba__label--after { right: 20px; }
+</style>
+
+<script>
+  (function() {
+    const slider = document.getElementById('lys-ba-slider');
+    if (!slider) return;
+    const before = slider.querySelector('.lys-ba__before-wrap');
+    const handle = slider.querySelector('[data-handle]');
+
+    let dragging = false;
+
+    const move = (clientX) => {
+      const rect = slider.getBoundingClientRect();
+      let pct = ((clientX - rect.left) / rect.width) * 100;
+      pct = Math.max(0, Math.min(100, pct));
+      before.style.width = pct + '%';
+      handle.style.left = pct + '%';
+    };
+
+    slider.addEventListener('mousedown', e => { dragging = true; move(e.clientX); });
+    window.addEventListener('mousemove', e => { if (dragging) move(e.clientX); });
+    window.addEventListener('mouseup', () => dragging = false);
+
+    slider.addEventListener('touchstart', e => { dragging = true; move(e.touches[0].clientX); });
+    window.addEventListener('touchmove', e => { if (dragging) move(e.touches[0].clientX); });
+    window.addEventListener('touchend', () => dragging = false);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Before / After",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "60 seconds. One client. Real result." },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Drag the slider to see the transformation" },
+    { "type": "image_picker", "id": "before", "label": "Before image" },
+    { "type": "image_picker", "id": "after", "label": "After image" }
+  ],
+  "presets": [{ "name": "Before / After" }]
+}
+{% endschema %}

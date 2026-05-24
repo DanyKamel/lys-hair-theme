@@ -1,0 +1,105 @@
+{% comment %}
+  LYS HAIR — Why LYS / Trust Pillars
+  4-column value props
+  Psychology: Reduce risk, communicate quality, justify price
+{% endcomment %}
+
+<section class="lys-why">
+  <div class="lys-why__inner">
+    <div class="lys-why__head">
+      <span class="lys-why__eyebrow">WHY LYS</span>
+      <h2 class="lys-why__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="lys-why__grid">
+      {% for block in section.blocks %}
+        <div class="lys-why__item">
+          <div class="lys-why__icon">{{ block.settings.icon }}</div>
+          <h3>{{ block.settings.heading }}</h3>
+          <p>{{ block.settings.body }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .lys-why {
+    padding: 100px 0;
+    background: #1A1410;
+    color: #F5EFE6;
+    font-family: 'Jost', sans-serif;
+  }
+  .lys-why__inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+  .lys-why__head { text-align: center; margin-bottom: 60px; }
+  .lys-why__eyebrow {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #C9A97A;
+    margin-bottom: 16px;
+  }
+  .lys-why__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    margin: 0;
+  }
+  .lys-why__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+  @media (max-width: 900px) { .lys-why__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .lys-why__grid { grid-template-columns: 1fr; } }
+  .lys-why__item { text-align: center; }
+  .lys-why__icon {
+    font-size: 36px;
+    color: #C9A97A;
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+  .lys-why__item h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin: 0 0 12px;
+  }
+  .lys-why__item p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: rgba(245, 239, 230, 0.7);
+    margin: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Why LYS",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Made for women who notice the details" }
+  ],
+  "blocks": [
+    {
+      "type": "pillar",
+      "name": "Pillar",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "✦" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "100% Remy Hair" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Ethically sourced, cuticle-aligned hair that lasts 12+ months with proper care." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Why LYS",
+      "blocks": [
+        { "type": "pillar", "settings": { "icon": "✦", "heading": "100% Remy Hair", "body": "Ethically sourced, cuticle-aligned hair that lasts 12+ months with proper care." } },
+        { "type": "pillar", "settings": { "icon": "◆", "heading": "Undetectable Application", "body": "Patented seamless wefts and ultra-thin tape — no one will know they're not yours." } },
+        { "type": "pillar", "settings": { "icon": "⚡", "heading": "Ships in 24 Hours", "body": "From our Sydney studio. Express options available at checkout." } },
+        { "type": "pillar", "settings": { "icon": "↩", "heading": "30-Day Try-On", "body": "Not in love? Return them. We pay shipping both ways." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,87 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "LYS HAIR BY NORHAN",
+        "headline": "The hair you've always wanted",
+        "subheadline": "Luxury extensions, undetectable application, salon-quality results — without the salon price.",
+        "cta_primary_text": "Shop Extensions",
+        "cta_secondary_text": "Find My Shade",
+        "proof_text": "Loved by 10,000+ women worldwide"
+      }
+    },
+    "why-lys": {
+      "type": "why-lys",
+      "blocks": {
+        "p1": { "type": "pillar", "settings": { "icon": "✦", "heading": "100% Remy Hair", "body": "Ethically sourced, cuticle-aligned hair that lasts 12+ months with proper care." } },
+        "p2": { "type": "pillar", "settings": { "icon": "◆", "heading": "Undetectable Application", "body": "Patented seamless wefts and ultra-thin tape — no one will know they're not yours." } },
+        "p3": { "type": "pillar", "settings": { "icon": "⚡", "heading": "Ships in 24 Hours", "body": "From our Sydney studio. Express options available at checkout." } },
+        "p4": { "type": "pillar", "settings": { "icon": "↩", "heading": "30-Day Try-On", "body": "Not in love? Return them. We pay shipping both ways." } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4"]
+    },
+    "video-showcase": {
+      "type": "video-showcase",
+      "settings": {
+        "eyebrow": "THE TRANSFORMATION",
+        "title": "Watch the magic happen",
+        "subtitle": "From thin & flat to full & voluminous — in under 60 minutes."
+      },
+      "blocks": {
+        "v1": { "type": "video", "settings": { "label": "Tape-In Application", "size": "wide" } },
+        "v2": { "type": "video", "settings": { "label": "Colour Match", "size": "normal" } },
+        "v3": { "type": "video", "settings": { "label": "Before & After", "size": "normal" } },
+        "v4": { "type": "video", "settings": { "label": "Styling Tutorial", "size": "normal" } }
+      },
+      "block_order": ["v1", "v2", "v3", "v4"]
+    },
+    "before-after": {
+      "type": "before-after",
+      "settings": {
+        "title": "60 seconds. One client. Real result.",
+        "subtitle": "Drag the slider to see the transformation"
+      }
+    },
+    "bundle": {
+      "type": "bundle-builder"
+    },
+    "reviews": {
+      "type": "reviews",
+      "blocks": {
+        "r1": { "type": "review", "settings": { "author": "Sarah M.", "location": "Sydney", "body": "I've tried so many brands and nothing comes close. The tape-ins are literally invisible and I've had them for 4 months with zero slippage.", "product": "Tape-In Extensions — #6 Chestnut" } },
+        "r2": { "type": "review", "settings": { "author": "Amira K.", "location": "Melbourne", "body": "Norhan helped me match my shade perfectly. The hair feels so soft and natural, I get compliments every single day.", "product": "Clip-In Set — #3 Dark Brown" } },
+        "r3": { "type": "review", "settings": { "author": "Jessica T.", "location": "Brisbane", "body": "After having my baby my hair was so thin. These extensions gave me my confidence back. Honestly life-changing.", "product": "Volume Weft — #60 Platinum Blonde" } }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    },
+    "ugc": {
+      "type": "ugc-wall",
+      "settings": {
+        "eyebrow": "AS WORN BY",
+        "title": "Real women. Real results.",
+        "handle": "@lyshairbynorhan"
+      },
+      "blocks": {
+        "u1": { "type": "post", "settings": { "handle": "sarah_m" } },
+        "u2": { "type": "post", "settings": { "handle": "amira.k" } },
+        "u3": { "type": "post", "settings": { "handle": "jess_t" } },
+        "u4": { "type": "post", "settings": { "handle": "norhan.hair" } },
+        "u5": { "type": "post", "settings": { "handle": "lys.inspo" } },
+        "u6": { "type": "post", "settings": { "handle": "mia.b" } },
+        "u7": { "type": "post", "settings": { "handle": "chloe.lys" } },
+        "u8": { "type": "post", "settings": { "handle": "tara_w" } }
+      },
+      "block_order": ["u1","u2","u3","u4","u5","u6","u7","u8"]
+    },
+    "capture": {
+      "type": "email-capture",
+      "settings": {
+        "eyebrow": "JOIN THE LYS COMMUNITY",
+        "title": "Your best hair day starts here",
+        "subtitle": "Get 10% off your first order plus early access to new shades, restocks & tutorials."
+      }
+    }
+  },
+  "order": ["hero", "why-lys", "video-showcase", "before-after", "bundle", "reviews", "ugc", "capture"]
+}

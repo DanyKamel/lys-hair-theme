@@ -1,0 +1,14 @@
+{
+  "current": {
+    "color_bg": "#1A1410",
+    "color_text": "#F5EFE6",
+    "color_gold": "#C9A97A",
+    "cart_drawer_enabled": true,
+    "free_shipping_threshold": 150,
+    "announcement_enabled": true,
+    "announcement_text_1": "Free shipping on orders over $150",
+    "announcement_text_2": "Ethically sourced human hair extensions",
+    "announcement_text_3": "30-day satisfaction guarantee"
+  },
+  "presets": {}
+}

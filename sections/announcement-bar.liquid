@@ -1,0 +1,140 @@
+{% comment %}
+  LYS HAIR — Announcement Bar
+  Sticky top bar with rotating messages + countdown timer
+  Psychology: Urgency (countdown), Loss aversion (free shipping threshold)
+{% endcomment %}
+
+<div class="lys-announce" data-sale-end="{{ section.settings.sale_end_date }}">
+  <div class="lys-announce__inner">
+    <div class="lys-announce__rotator">
+      {% for block in section.blocks %}
+        <div class="lys-announce__msg" data-index="{{ forloop.index0 }}">
+          {% if block.settings.show_icon %}<span class="lys-announce__icon">{{ block.settings.icon }}</span>{% endif %}
+          <span>{{ block.settings.message }}</span>
+          {% if block.settings.show_countdown %}
+            <span class="lys-countdown" data-countdown>
+              <span data-cd-h>00</span>:<span data-cd-m>00</span>:<span data-cd-s>00</span>
+            </span>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .lys-announce {
+    background: #1A1410;
+    color: #F5EFE6;
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid #2E2820;
+    overflow: hidden;
+    position: relative;
+    z-index: 100;
+  }
+  .lys-announce__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    text-align: center;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lys-announce__rotator { position: relative; width: 100%; }
+  .lys-announce__msg {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    animation: lysFadeIn 0.6s ease;
+  }
+  .lys-announce__msg.is-active { display: flex; }
+  .lys-announce__icon { color: #C9A97A; }
+  .lys-countdown {
+    color: #C9A97A;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    margin-left: 6px;
+  }
+  @keyframes lysFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  (function() {
+    const msgs = document.querySelectorAll('.lys-announce__msg');
+    if (!msgs.length) return;
+    msgs[0].classList.add('is-active');
+    let i = 0;
+    if (msgs.length > 1) {
+      setInterval(() => {
+        msgs[i].classList.remove('is-active');
+        i = (i + 1) % msgs.length;
+        msgs[i].classList.add('is-active');
+      }, 4500);
+    }
+
+    // Countdown timer
+    const bar = document.querySelector('.lys-announce');
+    const saleEnd = bar?.dataset.saleEnd;
+    if (saleEnd) {
+      const endTime = new Date(saleEnd).getTime();
+      const tick = () => {
+        const diff = endTime - Date.now();
+        if (diff <= 0) return;
+        const h = String(Math.floor(diff / 3.6e6)).padStart(2, '0');
+        const m = String(Math.floor((diff % 3.6e6) / 6e4)).padStart(2, '0');
+        const s = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
+        document.querySelectorAll('[data-cd-h]').forEach(el => el.textContent = h);
+        document.querySelectorAll('[data-cd-m]').forEach(el => el.textContent = m);
+        document.querySelectorAll('[data-cd-s]').forEach(el => el.textContent = s);
+      };
+      tick();
+      setInterval(tick, 1000);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "sale_end_date",
+      "label": "Sale end date (ISO format)",
+      "default": "2026-12-31T23:59:59",
+      "info": "Format: YYYY-MM-DDTHH:MM:SS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "text", "id": "message", "label": "Message", "default": "FREE SHIPPING ON ORDERS OVER $150" },
+        { "type": "checkbox", "id": "show_icon", "label": "Show icon", "default": true },
+        { "type": "text", "id": "icon", "label": "Icon (emoji)", "default": "✦" },
+        { "type": "checkbox", "id": "show_countdown", "label": "Show countdown", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar",
+      "blocks": [
+        { "type": "message", "settings": { "message": "FREE SHIPPING ON ORDERS OVER $150", "icon": "✦" } },
+        { "type": "message", "settings": { "message": "SPRING SALE — 25% OFF ENDS IN", "icon": "⏱", "show_countdown": true } },
+        { "type": "message", "settings": { "message": "AFTERPAY · KLARNA · APPLE PAY", "icon": "◆" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

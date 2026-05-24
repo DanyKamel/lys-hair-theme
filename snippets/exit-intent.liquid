@@ -1,0 +1,210 @@
+{% comment %}
+  LYS HAIR — Exit Intent Popup
+  Mouse-out (desktop) + scroll-back-to-top (mobile) triggered email capture
+  Psychology: Reciprocity (free 10%) + scarcity (10-min countdown) + commitment
+{% endcomment %}
+
+<div class="lys-exit" id="lys-exit" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="lys-exit__backdrop" data-exit-close></div>
+  <div class="lys-exit__modal">
+    <button class="lys-exit__close" data-exit-close aria-label="Close">×</button>
+    <div class="lys-exit__grid">
+      <div class="lys-exit__visual"></div>
+      <div class="lys-exit__content">
+        <span class="lys-exit__eyebrow">WAIT — DON'T LEAVE EMPTY-HANDED</span>
+        <h2 class="lys-exit__title">10% OFF<br>Your First Order</h2>
+        <p class="lys-exit__sub">Plus early access to new shades, restocks, and member-only drops.</p>
+
+        <div class="lys-exit__timer">
+          Offer expires in <strong><span data-exit-m>10</span>:<span data-exit-s>00</span></strong>
+        </div>
+
+        <form class="lys-exit__form" data-exit-form>
+          <input type="email" name="email" placeholder="your@email.com" required>
+          <button type="submit" class="lys-btn lys-btn--primary lys-btn--block">CLAIM MY 10% OFF</button>
+        </form>
+
+        <button class="lys-exit__decline" data-exit-close>No thanks, I'll pay full price</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lys-exit {
+    position: fixed; inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .lys-exit.is-open { display: flex; }
+  .lys-exit__backdrop {
+    position: absolute; inset: 0;
+    background: rgba(26, 20, 16, 0.7);
+    backdrop-filter: blur(4px);
+  }
+  .lys-exit__modal {
+    position: relative;
+    background: #1A1410;
+    color: #F5EFE6;
+    max-width: 820px;
+    width: 92%;
+    max-height: 92vh;
+    overflow: auto;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    animation: lysExitIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes lysExitIn {
+    from { transform: scale(0.95) translateY(20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+  .lys-exit__close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none;
+    color: #F5EFE6; font-size: 28px;
+    cursor: pointer; z-index: 2;
+  }
+  .lys-exit__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .lys-exit__visual {
+    background: url('https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=800') center/cover;
+    min-height: 480px;
+  }
+  .lys-exit__content {
+    padding: 48px 40px;
+  }
+  .lys-exit__eyebrow {
+    display: block;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #C9A97A;
+    margin-bottom: 20px;
+  }
+  .lys-exit__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 52px;
+    line-height: 1;
+    margin: 0 0 16px;
+  }
+  .lys-exit__sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(245, 239, 230, 0.75);
+    margin: 0 0 24px;
+  }
+  .lys-exit__timer {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: #C9A97A;
+    margin-bottom: 20px;
+  }
+  .lys-exit__timer strong { font-variant-numeric: tabular-nums; }
+  .lys-exit__form input {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    border: 1px solid rgba(245, 239, 230, 0.3);
+    color: #F5EFE6;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .lys-exit__form input:focus { outline: none; border-color: #C9A97A; }
+  .lys-exit__decline {
+    background: none; border: none;
+    color: rgba(245, 239, 230, 0.5);
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 16px;
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+  @media (max-width: 720px) {
+    .lys-exit__grid { grid-template-columns: 1fr; }
+    .lys-exit__visual { min-height: 200px; }
+    .lys-exit__content { padding: 32px 24px; }
+    .lys-exit__title { font-size: 40px; }
+  }
+</style>
+
+<script>
+  (function() {
+    const KEY = 'lys-exit-shown';
+    if (sessionStorage.getItem(KEY)) return;
+
+    const el = document.getElementById('lys-exit');
+    if (!el) return;
+    let triggered = false;
+
+    const open = () => {
+      if (triggered) return;
+      triggered = true;
+      sessionStorage.setItem(KEY, '1');
+      el.classList.add('is-open');
+      el.setAttribute('aria-hidden', 'false');
+      startTimer();
+    };
+
+    const close = () => {
+      el.classList.remove('is-open');
+      el.setAttribute('aria-hidden', 'true');
+    };
+
+    // Desktop: mouse leave top of viewport
+    document.addEventListener('mouseleave', (e) => {
+      if (e.clientY < 5 && !triggered) open();
+    });
+
+    // Mobile: scroll up fast trigger
+    let lastY = window.scrollY;
+    window.addEventListener('scroll', () => {
+      if (window.innerWidth > 768) return;
+      const y = window.scrollY;
+      if (lastY - y > 50 && y < 200 && !triggered) open();
+      lastY = y;
+    });
+
+    // Time-based fallback: 45s
+    setTimeout(() => { if (!triggered) open(); }, 45000);
+
+    el.querySelectorAll('[data-exit-close]').forEach(b => b.addEventListener('click', close));
+
+    function startTimer() {
+      let total = 600;
+      const m = el.querySelector('[data-exit-m]');
+      const s = el.querySelector('[data-exit-s]');
+      const tick = () => {
+        if (total <= 0) return;
+        m.textContent = String(Math.floor(total/60)).padStart(2,'0');
+        s.textContent = String(total % 60).padStart(2,'0');
+        total--;
+      };
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    el.querySelector('[data-exit-form]')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = e.target.email.value;
+      // Replace with Klaviyo / Shopify Customer endpoint
+      console.log('Capture:', email);
+      el.querySelector('.lys-exit__content').innerHTML = `
+        <h2 class="lys-exit__title" style="text-align:center;">Check Your Inbox ✦</h2>
+        <p class="lys-exit__sub" style="text-align:center;">Your code <strong style="color:#C9A97A;">LYS10</strong> is on the way.<br>Free shipping on orders over $150.</p>
+        <button class="lys-btn lys-btn--primary lys-btn--block" data-exit-close>Start Shopping</button>
+      `;
+      el.querySelector('[data-exit-close]').addEventListener('click', close);
+    });
+  })();
+</script>

@@ -1,0 +1,93 @@
+{% comment %}
+  LYS HAIR — FOMO / Recent Purchase Popups
+  Bottom-left rotating toast notifications
+  Psychology: Social proof + bandwagon — "others are buying right now"
+{% endcomment %}
+
+<div class="lys-fomo" id="lys-fomo" aria-live="polite">
+  <button class="lys-fomo__close" aria-label="Close">×</button>
+  <div class="lys-fomo__img">
+    <img src="" alt="" id="lys-fomo-img">
+  </div>
+  <div class="lys-fomo__body">
+    <p class="lys-fomo__name"><strong id="lys-fomo-name"></strong> in <span id="lys-fomo-city"></span></p>
+    <p class="lys-fomo__product">just purchased <strong id="lys-fomo-product"></strong></p>
+    <p class="lys-fomo__time" id="lys-fomo-time"></p>
+  </div>
+</div>
+
+<style>
+  .lys-fomo {
+    position: fixed;
+    bottom: 20px; left: 20px;
+    width: 320px;
+    background: #FFFFFF;
+    box-shadow: 0 16px 48px rgba(26, 20, 16, 0.18);
+    padding: 14px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    z-index: 90;
+    border-left: 3px solid #C9A97A;
+    transform: translateX(-120%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lys-fomo.is-visible { display: flex; transform: translateX(0); }
+  .lys-fomo__close {
+    position: absolute; top: 6px; right: 8px;
+    background: none; border: none; font-size: 18px;
+    cursor: pointer; color: #A89070;
+  }
+  .lys-fomo__img {
+    width: 56px; height: 56px;
+    background: #F5EFE6;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .lys-fomo__img img { width: 100%; height: 100%; object-fit: cover; }
+  .lys-fomo__body { font-family: 'Jost', sans-serif; font-size: 13px; line-height: 1.4; color: #1A1410; }
+  .lys-fomo__name { margin: 0; }
+  .lys-fomo__product { margin: 2px 0; }
+  .lys-fomo__time { margin: 0; font-size: 11px; color: #A89070; }
+  @media (max-width: 600px) {
+    .lys-fomo { left: 10px; right: 10px; width: auto; bottom: 10px; }
+  }
+</style>
+
+<script>
+  (function() {
+    const purchases = [
+      { name: 'Sarah', city: 'Melbourne', product: 'Ash Blonde Tape-Ins 20"', img: '{{ "fomo-1.jpg" | asset_url }}', mins: 2 },
+      { name: 'Emma',  city: 'Sydney',    product: 'Chocolate Clip-Ins 22"', img: '{{ "fomo-2.jpg" | asset_url }}', mins: 7 },
+      { name: 'Layla', city: 'Brisbane',  product: 'Honey Blonde Weft 18"',  img: '{{ "fomo-3.jpg" | asset_url }}', mins: 12 },
+      { name: 'Mia',   city: 'Perth',     product: 'Jet Black Tape-Ins 24"', img: '{{ "fomo-4.jpg" | asset_url }}', mins: 18 },
+      { name: 'Olivia',city: 'Adelaide',  product: 'Caramel Clip-Ins 20"',   img: '{{ "fomo-5.jpg" | asset_url }}', mins: 24 },
+      { name: 'Zoe',   city: 'Gold Coast',product: 'Rooted Brunette Weft 22"',img:'{{ "fomo-6.jpg" | asset_url }}', mins: 33 }
+    ];
+
+    const el = document.getElementById('lys-fomo');
+    if (!el) return;
+    let i = 0;
+
+    const show = () => {
+      const p = purchases[i % purchases.length];
+      document.getElementById('lys-fomo-name').textContent = p.name;
+      document.getElementById('lys-fomo-city').textContent = p.city;
+      document.getElementById('lys-fomo-product').textContent = p.product;
+      document.getElementById('lys-fomo-time').textContent = p.mins + ' minutes ago';
+      const img = document.getElementById('lys-fomo-img');
+      if (p.img && !p.img.includes('{{')) img.src = p.img;
+      el.classList.add('is-visible');
+      setTimeout(() => el.classList.remove('is-visible'), 5500);
+      i++;
+    };
+
+    setTimeout(show, 8000);
+    setInterval(show, 32000);
+
+    el.querySelector('.lys-fomo__close').addEventListener('click', () => {
+      el.classList.remove('is-visible');
+      el.style.display = 'none';
+    });
+  })();
+</script>

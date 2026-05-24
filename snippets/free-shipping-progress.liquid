@@ -1,0 +1,56 @@
+{% comment %}
+  LYS HAIR — Free Shipping Progress Bar
+  Used in cart drawer + product page
+  Psychology: Loss aversion + goal gradient effect — they're $X away from a reward
+{% endcomment %}
+
+{% assign threshold = 15000 %}
+{% assign current = cart.total_price | default: product.price %}
+{% assign remaining = threshold | minus: current %}
+{% assign pct = current | times: 100 | divided_by: threshold %}
+{% if pct > 100 %}{% assign pct = 100 %}{% endif %}
+
+<div class="lys-ship-progress" data-threshold="{{ threshold }}">
+  {% if remaining > 0 %}
+    <p class="lys-ship-progress__msg">
+      You're <strong>{{ remaining | money }}</strong> away from <strong>FREE SHIPPING</strong>
+    </p>
+  {% else %}
+    <p class="lys-ship-progress__msg lys-ship-progress__msg--won">
+      ✦ You've unlocked <strong>FREE SHIPPING</strong>
+    </p>
+  {% endif %}
+  <div class="lys-ship-progress__bar">
+    <div class="lys-ship-progress__fill" style="width: {{ pct }}%;"></div>
+  </div>
+</div>
+
+<style>
+  .lys-ship-progress {
+    margin: 20px 0;
+    padding: 14px 16px;
+    background: rgba(201, 169, 122, 0.08);
+    border: 1px solid rgba(201, 169, 122, 0.25);
+  }
+  .lys-ship-progress__msg {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: #1A1410;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+  }
+  .lys-ship-progress__msg--won { color: #C9A97A; }
+  .lys-ship-progress__msg strong { color: #1A1410; font-weight: 600; }
+  .lys-ship-progress__msg--won strong { color: #C9A97A; }
+  .lys-ship-progress__bar {
+    height: 4px;
+    background: rgba(26, 20, 16, 0.1);
+    overflow: hidden;
+  }
+  .lys-ship-progress__fill {
+    height: 100%;
+    background: linear-gradient(90deg, #C9A97A, #D9BC8E);
+    transition: width 0.6s ease;
+  }
+</style>

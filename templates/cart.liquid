@@ -1,0 +1,31 @@
+{% layout 'theme' %}
+
+<div class="lys-cart" style="max-width:800px;margin:0 auto;padding:60px 32px;">
+  <h1 style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:48px;color:#F5EFE6;margin-bottom:40px;">Your Cart</h1>
+
+  {% if cart.item_count == 0 %}
+    <p style="color:rgba(245,239,230,0.7);margin-bottom:32px;">Your cart is empty.</p>
+    <a href="/collections/all" class="lys-btn">Continue Shopping</a>
+  {% else %}
+    <form action="/cart" method="post">
+      {% for item in cart.items %}
+        <div style="display:flex;gap:24px;align-items:center;padding:24px 0;border-bottom:1px solid #2E2820;">
+          <img src="{{ item.image | image_url: width: 120 }}" alt="{{ item.title | escape }}" style="width:80px;height:80px;object-fit:cover;">
+          <div style="flex:1;">
+            <p style="color:#F5EFE6;font-weight:500;">{{ item.product.title }}</p>
+            <p style="color:rgba(245,239,230,0.6);font-size:14px;">{{ item.variant.title }}</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" style="width:60px;background:#2E2820;border:1px solid #3E3830;color:#F5EFE6;padding:8px;text-align:center;">
+            <p style="color:#C9A97A;font-weight:500;min-width:80px;text-align:right;">{{ item.final_line_price | money }}</p>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div style="text-align:right;padding:32px 0;">
+        <p style="font-size:20px;color:#F5EFE6;margin-bottom:24px;">Total: <strong style="color:#C9A97A;">{{ cart.total_price | money }}</strong></p>
+        <button type="submit" name="checkout" class="lys-btn" style="padding:16px 48px;font-size:16px;">Checkout</button>
+      </div>
+    </form>
+  {% endif %}
+</div>
